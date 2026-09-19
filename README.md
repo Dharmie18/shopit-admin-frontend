@@ -11,17 +11,6 @@ The **ShopIt Admin Frontend** is the private management interface for store admi
 
 ---
 
-##  Default Administrator Credentials
-
-| Field | Value |
-|---|---|
-| **Email** | `admin@shopit.co` |
-| **Password** | `admin12345` |
-| **Display Name** | `SI Admin` |
-| **Role** | `admin` (Superadmin — Protected from deletion) |
-
----
-
 ##  Modules & Capabilities
 
 - ** Executive Analytics Dashboard**: Real-time gross settled revenue in Naira (`₦`), monthly momentum, low stock alerts, revenue pulse bar chart, and Top 5 B2B Customer leaderboard.
