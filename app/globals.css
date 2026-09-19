@@ -1,0 +1,45 @@
+﻿@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme inline {
+  --color-brand-navy: #14212b;
+  --color-brand-bone: #f5f5f1;
+  --color-brand-stone: #e8e8e1;
+  --color-brand-lime: #e0ee56;
+  --color-brand-rust: #9a4e2c;
+  --color-brand-amber: #e0a22b;
+  --color-brand-emerald: #10b981;
+  --color-brand-crimson: #ef4444;
+}
+
+:root {
+  --background: #f5f5f1;
+  --foreground: #14212b;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #e8e8e1;
+}
+::-webkit-scrollbar-thumb {
+  background: #14212b40;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #14212b80;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
