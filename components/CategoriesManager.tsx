@@ -232,8 +232,14 @@ export function CategoriesManager({ onNotify }: { onNotify: (msg: string) => voi
             >
               Cancel
             </Button>
-            <Button type="submit" variant="primary" size="sm" disabled={submitting}>
-              {submitting ? 'Saving...' : modalMode === 'add' ? 'Create Category' : 'Save Changes'}
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              loading={submitting}
+              loadingText="Saving..."
+            >
+              {modalMode === 'add' ? 'Create Category' : 'Save Changes'}
             </Button>
           </div>
         </form>
@@ -272,9 +278,10 @@ export function CategoriesManager({ onNotify }: { onNotify: (msg: string) => voi
                 variant="danger"
                 size="sm"
                 onClick={confirmDeleteCategory}
-                disabled={submitting}
+                loading={submitting}
+                loadingText="Deleting..."
               >
-                {submitting ? 'Deleting...' : 'Confirm Delete'}
+                Confirm Delete
               </Button>
             </div>
           </div>

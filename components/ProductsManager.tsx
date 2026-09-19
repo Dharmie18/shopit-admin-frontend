@@ -357,8 +357,14 @@ export function ProductsManager({ onNotify }: { onNotify: (msg: string) => void 
             >
               Cancel
             </Button>
-            <Button type="submit" variant="primary" size="sm" disabled={submitting}>
-              {submitting ? 'Saving...' : modalMode === 'add' ? 'Publish Product' : 'Save Changes'}
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              loading={submitting}
+              loadingText="Saving..."
+            >
+              {modalMode === 'add' ? 'Publish Product' : 'Save Changes'}
             </Button>
           </div>
         </form>
@@ -398,9 +404,10 @@ export function ProductsManager({ onNotify }: { onNotify: (msg: string) => void 
                 variant="danger"
                 size="sm"
                 onClick={confirmDeleteProduct}
-                disabled={submitting}
+                loading={submitting}
+                loadingText="Deleting..."
               >
-                {submitting ? 'Deleting...' : 'Confirm Delete'}
+                Confirm Delete
               </Button>
             </div>
           </div>

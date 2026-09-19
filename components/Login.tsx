@@ -113,10 +113,11 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
 
               <Button
                 type="submit"
-                disabled={loading}
+                loading={loading}
+                loadingText="Verifying Admin Role..."
                 className="mt-2 w-full py-4 text-xs font-black uppercase tracking-[0.16em]"
               >
-                {loading ? 'Verifying Admin Role...' : 'Sign In to Console'}
+                Sign In to Console
                 <ArrowRight className="ml-2 size-4" />
               </Button>
             </form>

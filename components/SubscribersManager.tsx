@@ -228,9 +228,10 @@ export function SubscribersManager({ onNotify }: { onNotify: (msg: string) => vo
                 variant="danger"
                 size="sm"
                 onClick={confirmDeleteSubscriber}
-                disabled={actionLoading}
+                loading={actionLoading}
+                loadingText="Removing..."
               >
-                {actionLoading ? 'Removing...' : 'Confirm Remove'}
+                Confirm Remove
               </Button>
             </div>
           </div>

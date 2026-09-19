@@ -464,9 +464,10 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
                 variant="danger"
                 size="sm"
                 onClick={confirmDeleteUser}
-                disabled={actionLoading}
+                loading={actionLoading}
+                loadingText="Deleting..."
               >
-                {actionLoading ? 'Deleting...' : 'Confirm Delete'}
+                Confirm Delete
               </Button>
             </div>
           </div>
