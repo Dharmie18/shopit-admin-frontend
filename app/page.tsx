@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AdminView, User } from '@/lib/types';
 import { getAdminToken, clearAdminAuth, getAdminUser, saveAdminAuth } from '@/lib/auth';
 import { apiRequest } from '@/lib/api';
@@ -14,12 +14,65 @@ import { OrdersManager } from '@/components/OrdersManager';
 import { PaymentsManager } from '@/components/PaymentsManager';
 import { SubscribersManager } from '@/components/SubscribersManager';
 
+const INACTIVITY_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
+
 export default function AdminPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [sessionNotice, setSessionNotice] = useState('');
   const [view, setView] = useState<AdminView>('dashboard');
   const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null);
   const [toast, setToast] = useState('');
+
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleInactivityLogout = useCallback(() => {
+    clearAdminAuth();
+    setLoggedIn(false);
+    setCurrentUser(null);
+    setSessionNotice('Your session expired after 20 minutes of inactivity. Please sign in again.');
+  }, []);
+
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    inactivityTimerRef.current = setTimeout(() => {
+      handleInactivityLogout();
+    }, INACTIVITY_TIMEOUT_MS);
+  }, [handleInactivityLogout]);
+
+  // Activity listeners for 20-minute inactivity
+  useEffect(() => {
+    if (!loggedIn) {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      return;
+    }
+
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+
+    function onUserActivity() {
+      resetInactivityTimer();
+    }
+
+    // Start initial timer
+    resetInactivityTimer();
+
+    activityEvents.forEach((evt) => {
+      window.addEventListener(evt, onUserActivity, { passive: true });
+    });
+
+    return () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      activityEvents.forEach((evt) => {
+        window.removeEventListener(evt, onUserActivity);
+      });
+    };
+  }, [loggedIn, resetInactivityTimer]);
 
   useEffect(() => {
     function handleUnauthorized() {
@@ -27,6 +80,7 @@ export default function AdminPage() {
       setLoggedIn(false);
       setCurrentUser(null);
       setCheckingAuth(false);
+      setSessionNotice('Your session has expired or is unauthorized. Please sign in again.');
     }
 
     window.addEventListener('shopit_admin_unauthorized', handleUnauthorized);
@@ -74,6 +128,7 @@ export default function AdminPage() {
 
   function handleLoginSuccess() {
     setLoggedIn(true);
+    setSessionNotice('');
     setCurrentUser(getAdminUser());
     setView('dashboard');
     notify('Welcome to ShopIt Control Room.');
@@ -83,6 +138,7 @@ export default function AdminPage() {
     clearAdminAuth();
     setLoggedIn(false);
     setCurrentUser(null);
+    setSessionNotice('');
   }
 
   if (checkingAuth) {
@@ -97,7 +153,7 @@ export default function AdminPage() {
   }
 
   if (!loggedIn) {
-    return <Login onSuccess={handleLoginSuccess} />;
+    return <Login onSuccess={handleLoginSuccess} sessionExpiredMsg={sessionNotice} />;
   }
 
   return (

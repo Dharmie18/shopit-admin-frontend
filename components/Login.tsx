@@ -6,7 +6,12 @@ import { ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from './ui/button';
 import { User } from '@/lib/types';
 
-export function Login({ onSuccess }: { onSuccess: () => void }) {
+interface LoginProps {
+  onSuccess: () => void;
+  sessionExpiredMsg?: string;
+}
+
+export function Login({ onSuccess, sessionExpiredMsg }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,7 +40,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
         throw new Error('Unauthorized: This account does not have administrator privileges.');
       }
 
-      // 3. Save admin session
+      // 3. Save admin session (sessionStorage for tab-close auto-logout)
       saveAdminAuth(token, profile);
       onSuccess();
     } catch (err: any) {
@@ -51,7 +56,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
       <div className="bg-[#14212b] px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e0ee56]">
         <div className="mx-auto flex max-w-[1440px] justify-between">
           <span>ShopIt Admin Portal · Restricted System Area</span>
-          <span>Role Guard: Admin Only</span>
+          <span>Role Guard: Admin Only · Auto-Closes on Inactivity</span>
         </div>
       </div>
 
@@ -73,6 +78,16 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
           </div>
 
           <div className="border border-[#14212b]/20 bg-[#e8e8e1] p-8 shadow-xl">
+            {sessionExpiredMsg && !error && (
+              <div className="mb-6 flex items-start gap-3 border border-[#9a4e2c]/30 bg-[#fef3c7] p-4 text-xs text-[#92400e]">
+                <AlertCircle className="size-4 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-bold">Session Notice</p>
+                  <p className="mt-0.5">{sessionExpiredMsg}</p>
+                </div>
+              </div>
+            )}
+
             {error && (
               <div className="mb-6 flex items-start gap-3 border border-[#9a4e2c]/30 bg-[#fee2e2] p-4 text-xs text-[#991b1b]">
                 <AlertCircle className="size-4 shrink-0 mt-0.5" />
