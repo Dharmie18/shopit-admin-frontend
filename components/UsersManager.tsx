@@ -144,13 +144,14 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
 
       <div className="border border-[#14212b]/15 bg-[#f5f5f1]">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[750px] text-left text-sm">
+          <table className="w-full min-w-[850px] text-left text-sm">
             <thead className="bg-[#e8e8e1] text-[10px] font-black uppercase tracking-[0.14em] text-[#14212b]/60 border-b border-[#14212b]/15">
               <tr>
                 <th className="p-4">User ID</th>
                 <th className="p-4">Name</th>
                 <th className="p-4">Email</th>
                 <th className="p-4">Role</th>
+                <th className="p-4">Referral Info</th>
                 <th className="p-4">Registered Date</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
@@ -164,6 +165,7 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
                       <td className="p-4"><Skeleton className="h-4 w-32" /></td>
                       <td className="p-4"><Skeleton className="h-4 w-44" /></td>
                       <td className="p-4"><Skeleton className="h-6 w-16" /></td>
+                      <td className="p-4"><Skeleton className="h-4 w-24" /></td>
                       <td className="p-4"><Skeleton className="h-4 w-20" /></td>
                       <td className="p-4 text-right flex justify-end gap-2">
                         <Skeleton className="h-8 w-20" />
@@ -174,7 +176,7 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
                 </>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-xs text-[#14212b]/60">
+                  <td colSpan={7} className="p-8 text-center text-xs text-[#14212b]/60">
                     No users found matching "{search}"
                   </td>
                 </tr>
@@ -200,6 +202,27 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
                       <Badge variant={user.role === 'admin' ? 'info' : 'default'}>
                         {user.role || 'customer'}
                       </Badge>
+                    </td>
+                    <td className="p-4 text-xs">
+                      <div className="flex flex-col gap-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-mono font-bold text-[#14212b] bg-[#e8e8e1] px-1.5 py-0.5 rounded text-[11px]">
+                            {user.referral_code || '—'}
+                          </span>
+                          {user.referrals_count ? (
+                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">
+                              {user.referrals_count} ref{user.referrals_count > 1 ? 's' : ''}
+                            </span>
+                          ) : null}
+                        </div>
+                        {user.referred_by_name ? (
+                          <span className="text-[10px] text-[#9a4e2c] font-medium">
+                            Referred by {user.referred_by_name}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-[#14212b]/40">Direct Signup</span>
+                        )}
+                      </div>
                     </td>
                     <td className="p-4 text-xs text-[#14212b]/60">
                       {user.created_at || '—'}
@@ -397,12 +420,26 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
                 <p className="font-bold mt-1 uppercase">{selectedUser.role || 'customer'}</p>
               </div>
               <div className="border border-[#14212b]/15 bg-[#e8e8e1] p-3">
-                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Created Date</span>
-                <p className="font-bold mt-1">{selectedUser.created_at || '—'}</p>
+                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Referral Code</span>
+                <p className="font-mono font-bold mt-1 text-[#9a4e2c]">{selectedUser.referral_code || 'None'}</p>
               </div>
               <div className="border border-[#14212b]/15 bg-[#e8e8e1] p-3">
-                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Wholesale Terms</span>
-                <p className="font-bold mt-1">Active</p>
+                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Referred By</span>
+                <p className="font-bold mt-1">
+                  {selectedUser.referred_by_name ? (
+                    <span className="text-emerald-700">{selectedUser.referred_by_name} ({selectedUser.referred_by_code})</span>
+                  ) : (
+                    <span className="text-[#14212b]/50">Direct / Organic</span>
+                  )}
+                </p>
+              </div>
+              <div className="border border-[#14212b]/15 bg-[#e8e8e1] p-3">
+                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Total Invited Users</span>
+                <p className="font-bold mt-1 text-emerald-800">{selectedUser.referrals_count || 0} Registered Referrals</p>
+              </div>
+              <div className="border border-[#14212b]/15 bg-[#e8e8e1] p-3">
+                <span className="text-[10px] font-bold uppercase text-[#14212b]/50">Created Date</span>
+                <p className="font-bold mt-1">{selectedUser.created_at || '—'}</p>
               </div>
             </div>
 

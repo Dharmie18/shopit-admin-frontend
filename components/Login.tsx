@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { apiRequest } from '@/lib/api';
 import { saveAdminAuth, clearAdminAuth } from '@/lib/auth';
-import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from './ui/button';
 import { User } from '@/lib/types';
 
@@ -11,6 +11,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -92,7 +93,7 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@shopit.co"
+                  placeholder="Your administrator email"
                   className="w-full border border-[#14212b]/25 bg-[#f5f5f1] px-4 py-3 text-sm outline-none focus:border-[#9a4e2c]"
                 />
               </div>
@@ -101,14 +102,25 @@ export function Login({ onSuccess }: { onSuccess: () => void }) {
                 <label className="block text-[10px] font-black uppercase tracking-[0.16em] text-[#14212b]/75 mb-1.5">
                   Password
                 </label>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full border border-[#14212b]/25 bg-[#f5f5f1] px-4 py-3 text-sm outline-none focus:border-[#9a4e2c]"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full border border-[#14212b]/25 bg-[#f5f5f1] px-4 py-3 pr-11 text-sm outline-none focus:border-[#9a4e2c]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((visible) => !visible)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#14212b]/60 hover:text-[#14212b]"
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
               </div>
 
               <Button

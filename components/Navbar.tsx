@@ -16,7 +16,7 @@ export function Navbar({
   onNavigate,
   onLogout,
   adminName = 'SI Admin',
-  adminEmail = 'admin@shopit.co',
+  adminEmail = 'Administrator',
 }: NavbarProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#14212b]/15 bg-[#f5f5f1]/95 backdrop-blur">

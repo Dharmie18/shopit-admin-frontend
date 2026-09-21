@@ -108,7 +108,7 @@ export default function AdminPage() {
         onNavigate={setView}
         onLogout={handleLogout}
         adminName={currentUser?.first_name ? `${currentUser.first_name} ${currentUser.last_name || ''}` : 'Administrator'}
-        adminEmail={currentUser?.email || 'admin@shopit.co'}
+        adminEmail={currentUser?.email || 'Administrator'}
       />
 
       {/* Main Admin Body */}

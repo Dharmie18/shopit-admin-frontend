@@ -26,8 +26,10 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
   const [topCustomers, setTopCustomers] = useState<TopCustomerReport[]>([]);
   const [monthlySales, setMonthlySales] = useState<MonthlySalesReport[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openedAt, setOpenedAt] = useState<Date | null>(null);
 
   useEffect(() => {
+    setOpenedAt(new Date());
     async function loadReports() {
       setLoading(true);
       try {
@@ -66,7 +68,11 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="info">Live Production</Badge>
-          <span className="text-xs font-bold text-[#14212b]/60">Sept 19, 2026</span>
+          <span className="text-xs font-bold text-[#14212b]/60">
+            {openedAt
+              ? openedAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+              : 'Updating...'}
+          </span>
         </div>
       </div>
 

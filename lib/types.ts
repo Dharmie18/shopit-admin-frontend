@@ -6,6 +6,11 @@ export type User = {
   last_name: string;
   email: string;
   role?: string;
+  referral_code?: string;
+  referred_by_id?: number | null;
+  referred_by_name?: string | null;
+  referred_by_code?: string | null;
+  referrals_count?: number;
   created_at?: string;
 };
 
