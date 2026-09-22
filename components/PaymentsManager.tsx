@@ -23,7 +23,7 @@ export function PaymentsManager({ onNotify }: { onNotify: (msg: string) => void 
   async function loadPayments() {
     setLoading(true);
     try {
-      const [data] = await Promise.all([apiRequest('/api/admin/payments.php'), sleep(600)]);
+      const data = await apiRequest('/api/admin/payments.php');
       setPayments(Array.isArray(data) ? data : []);
     } catch (err: any) {
       onNotify('Failed to fetch payments: ' + err.message);

@@ -31,10 +31,7 @@ export function SubscribersManager({ onNotify }: { onNotify: (msg: string) => vo
   async function loadSubscribers() {
     setLoading(true);
     try {
-      const [data] = await Promise.all([
-        apiRequest('/api/admin/subscribers.php'),
-        sleep(600),
-      ]);
+      const data = await apiRequest('/api/admin/subscribers.php');
       setSubscribers(Array.isArray(data) ? data : []);
     } catch (err: any) {
       onNotify('Failed to fetch subscribers: ' + err.message);

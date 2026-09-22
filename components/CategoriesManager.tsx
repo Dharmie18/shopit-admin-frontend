@@ -25,7 +25,7 @@ export function CategoriesManager({ onNotify }: { onNotify: (msg: string) => voi
   async function loadCategories() {
     setLoading(true);
     try {
-      const [data] = await Promise.all([apiRequest('/api/categories/categories.php'), sleep(600)]);
+      const data = await apiRequest('/api/categories/categories.php');
       setCategories(Array.isArray(data) ? data : []);
     } catch (err: any) {
       onNotify('Failed to fetch categories: ' + err.message);

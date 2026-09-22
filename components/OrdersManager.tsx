@@ -9,7 +9,6 @@ import {
   Search,
 } from 'lucide-react';
 import { Button } from './ui/button';
-import { sleep } from '@/lib/utils';
 import { Modal } from './ui/modal';
 import { Badge } from './ui/badge';
 import { Skeleton } from './ui/skeleton';
@@ -29,8 +28,10 @@ export function OrdersManager({ onNotify }: { onNotify: (msg: string) => void })
   async function loadOrders() {
     setLoading(true);
     try {
-      const [data] = await Promise.all([apiRequest('/api/admin/orders.php'), sleep(600)]);
-      setOrders(Array.isArray(data) ? data : []);
+      const data = await apiRequest('/api/admin/orders.php');
+      const loadedOrders = Array.isArray(data) ? data : [];
+      loadedOrders.sort((a, b) => Number(b.order_id) - Number(a.order_id));
+      setOrders(loadedOrders);
     } catch (err: any) {
       onNotify('Failed to fetch orders: ' + err.message);
     } finally {

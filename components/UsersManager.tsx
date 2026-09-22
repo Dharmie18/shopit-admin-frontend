@@ -62,7 +62,7 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
   async function loadUsers() {
     setLoading(true);
     try {
-      const [data] = await Promise.all([apiRequest('/api/admin/users.php'), sleep(600)]);
+      const data = await apiRequest('/api/admin/users.php');
       setUsers(Array.isArray(data) ? data : []);
     } catch (err: any) {
       onNotify('Failed to fetch users: ' + err.message);
@@ -84,10 +84,7 @@ export function UsersManager({ onNotify }: { onNotify: (msg: string) => void }) 
     setHistoryLoading(true);
     setIsHistoryModalOpen(true);
     try {
-      const [data] = await Promise.all([
-        apiRequest<UserOrderHistory>(`/api/admin/user-orders.php?user_id=${user.user_id}`),
-        sleep(400),
-      ]);
+      const data = await apiRequest<UserOrderHistory>(`/api/admin/user-orders.php?user_id=${user.user_id}`);
       setOrderHistoryData(data);
     } catch (err: any) {
       onNotify('Failed to load user order history: ' + err.message);

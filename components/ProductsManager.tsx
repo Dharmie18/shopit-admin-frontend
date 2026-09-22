@@ -45,7 +45,6 @@ export function ProductsManager({ onNotify }: { onNotify: (msg: string) => void 
       const [prodData, catData] = await Promise.all([
         apiRequest('/api/products/products.php'),
         apiRequest('/api/categories/categories.php'),
-        sleep(600),
       ]);
       setProducts(Array.isArray(prodData) ? prodData : []);
       setCategories(Array.isArray(catData) ? catData : []);

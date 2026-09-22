@@ -37,7 +37,6 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
           apiRequest('/api/admin/reports.php/low-stock'),
           apiRequest('/api/admin/reports.php/top-customers'),
           apiRequest('/api/admin/reports.php/monthly-sales'),
-          sleep(700),
         ]);
         setLowStock(Array.isArray(lowStockData) ? lowStockData : []);
         setTopCustomers(Array.isArray(topCustData) ? topCustData : []);
