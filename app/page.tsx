@@ -106,6 +106,7 @@ export default function AdminPage() {
           saveAdminAuth(token, profile);
           setCurrentUser(profile);
           setLoggedIn(true);
+          loadAdminInit(token);
         } else {
           clearAdminAuth();
           setLoggedIn(false);
@@ -126,6 +127,18 @@ export default function AdminPage() {
     };
   }, []);
 
+  const loadAdminInit = useCallback(async (token?: string) => {
+    try {
+      const data = await apiRequest<AdminInitData>('/api/admin/init.php', 'GET', undefined, token);
+      if (data) {
+        if (data.settings) setSiteSettings(data.settings);
+        if (data.reports) setAdminReports(data.reports);
+      }
+    } catch {
+      // Keep defaults gracefully
+    }
+  }, []);
+
   function notify(msg: string) {
     setToast(msg);
     window.setTimeout(() => setToast(''), 3500);
@@ -136,7 +149,9 @@ export default function AdminPage() {
     setSessionNotice('');
     setCurrentUser(getAdminUser());
     setView('dashboard');
-    notify('Welcome to ShopIt Control Room.');
+    notify('Welcome to ' + (siteSettings.company_name || 'ShopIt') + ' Control Room.');
+    const token = getAdminToken();
+    if (token) loadAdminInit(token);
   }
 
   function handleLogout() {
@@ -150,7 +165,7 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen bg-[#f5f5f1] text-[#14212b] flex flex-col items-center justify-center p-6 text-center">
         <div className="grid size-12 place-items-center bg-[#14212b] text-xl font-black text-[#e0ee56] mb-4 animate-pulse">
-          S
+          {(siteSettings.company_name?.[0] || 'S').toUpperCase()}
         </div>
         <p className="text-xs font-black uppercase tracking-[0.2em] text-[#9a4e2c]">Verifying Security Credentials...</p>
       </div>
@@ -170,13 +185,14 @@ export default function AdminPage() {
         onLogout={handleLogout}
         adminName={currentUser?.first_name ? `${currentUser.first_name} ${currentUser.last_name || ''}` : 'Administrator'}
         adminEmail={currentUser?.email || 'Administrator'}
+        settings={siteSettings}
       />
 
       {/* Main Admin Body */}
       <div className="flex-1 mx-auto w-full max-w-[1440px] px-3 sm:px-5 py-6 md:py-10">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar */}
-          <Sidebar currentView={view} onNavigate={setView} />
+          <Sidebar currentView={view} onNavigate={setView} settings={siteSettings} />
 
           {/* View Content Canvas */}
           <main className="flex-1 min-w-0">
@@ -184,6 +200,8 @@ export default function AdminPage() {
               <Dashboard
                 onNavigateToProducts={() => setView('products')}
                 onNavigateToOrders={() => setView('orders')}
+                initData={adminReports ?? undefined}
+                settings={siteSettings}
               />
             )}
             {view === 'users' && <UsersManager onNotify={notify} />}
@@ -192,6 +210,12 @@ export default function AdminPage() {
             {view === 'orders' && <OrdersManager onNotify={notify} />}
             {view === 'payments' && <PaymentsManager onNotify={notify} />}
             {view === 'subscribers' && <SubscribersManager onNotify={notify} />}
+            {view === 'settings' && (
+              <SettingsManager
+                onNotify={notify}
+                onSettingsUpdated={(newSettings) => setSiteSettings(newSettings)}
+              />
+            )}
           </main>
         </div>
       </div>
@@ -199,7 +223,7 @@ export default function AdminPage() {
       {/* Footer */}
       <footer className="border-t border-[#14212b]/15 bg-[#14212b] px-4 sm:px-5 py-6 text-[#f5f5f1]">
         <div className="mx-auto flex max-w-[1440px] flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50 text-center sm:text-left">
-          <span>ShopIt ADMIN CONTROL ROOM · v2.4.0</span>
+          <span>{siteSettings.company_name.toUpperCase()} ADMIN CONTROL ROOM · v2.4.0</span>
           <span>Trade & Logistics System Engine</span>
         </div>
       </footer>

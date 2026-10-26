@@ -42,14 +42,23 @@ export function ProductsManager({ onNotify }: { onNotify: (msg: string) => void 
   async function loadData() {
     setLoading(true);
     try {
-      const [prodData, catData] = await Promise.all([
-        apiRequest('/api/products/products.php'),
-        apiRequest('/api/categories/categories.php'),
-      ]);
-      setProducts(Array.isArray(prodData) ? prodData : []);
-      setCategories(Array.isArray(catData) ? catData : []);
-    } catch (err: any) {
-      onNotify('Failed to fetch catalog: ' + err.message);
+      const data = await apiRequest<{ products: Product[]; categories: Category[] }>('/api/admin/catalog.php');
+      if (data) {
+        setProducts(Array.isArray(data.products) ? data.products : []);
+        setCategories(Array.isArray(data.categories) ? data.categories : []);
+      }
+    } catch {
+      // Fallback to separate endpoints if composite endpoint is unavailable
+      try {
+        const [prodData, catData] = await Promise.all([
+          apiRequest<Product[]>('/api/products/products.php'),
+          apiRequest<Category[]>('/api/categories/categories.php'),
+        ]);
+        setProducts(Array.isArray(prodData) ? prodData : []);
+        setCategories(Array.isArray(catData) ? catData : []);
+      } catch (err: any) {
+        onNotify('Failed to fetch catalog: ' + err.message);
+      }
     } finally {
       setLoading(false);
     }

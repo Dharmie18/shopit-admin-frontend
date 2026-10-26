@@ -53,8 +53,15 @@ const labelClass = 'block text-[11px] font-bold uppercase tracking-[0.14em] text
 const sectionHeadClass =
   'text-xs font-bold uppercase tracking-[0.18em] text-[#9a4e2c] pb-2 border-b border-[#14212b]/10 mb-4';
 
-export function SettingsManager({ onNotify }: { onNotify: (msg: string) => void }) {
+export function SettingsManager({
+  onNotify,
+  onSettingsUpdated,
+}: {
+  onNotify: (msg: string) => void;
+  onSettingsUpdated?: (newSettings: SiteSettings) => void;
+}) {
   const [form, setForm] = useState<SettingsForm>(EMPTY_FORM);
+  const [savedForm, setSavedForm] = useState<SettingsForm>(EMPTY_FORM);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -62,7 +69,9 @@ export function SettingsManager({ onNotify }: { onNotify: (msg: string) => void 
     async function loadSettings() {
       try {
         const data = await apiRequest<SiteSettings>('/api/admin/settings.php');
-        setForm(settingsToForm(data));
+        const loaded = settingsToForm(data);
+        setForm(loaded);
+        setSavedForm(loaded);
       } catch {
         onNotify('Could not load settings — showing defaults.');
       } finally {
@@ -72,16 +81,23 @@ export function SettingsManager({ onNotify }: { onNotify: (msg: string) => void 
     loadSettings();
   }, []);
 
+  const isDirty = JSON.stringify(form) !== JSON.stringify(savedForm);
+
   function handleChange(key: keyof SettingsForm, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!isDirty || saving) return;
     setSaving(true);
     try {
-      await apiRequest('/api/admin/settings.php', 'PUT', form);
-      onNotify('Store settings saved successfully.');
+      const res = await apiRequest<{ message: string; settings: SiteSettings }>('/api/admin/settings.php', 'PUT', form);
+      setSavedForm(form);
+      if (res && res.settings && onSettingsUpdated) {
+        onSettingsUpdated(res.settings);
+      }
+      onNotify('Store settings saved successfully and live on storefront.');
     } catch (err: any) {
       onNotify('Failed to save settings: ' + err.message);
     } finally {
@@ -307,14 +323,21 @@ export function SettingsManager({ onNotify }: { onNotify: (msg: string) => void 
         </div>
 
         {/* Submit */}
-        <div className="flex justify-end border-t border-[#14212b]/10 pt-6">
+        <div className="flex items-center justify-between border-t border-[#14212b]/10 pt-6">
+          <p className="text-xs text-[#14212b]/60">
+            {isDirty ? (
+              <span className="font-bold text-[#9a4e2c]">● Unsaved changes detected</span>
+            ) : (
+              <span>All settings are currently up to date</span>
+            )}
+          </p>
           <button
             type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 bg-[#14212b] text-[#e0ee56] px-5 py-2.5 text-xs font-black uppercase tracking-[0.12em] hover:bg-[#14212b]/90 cursor-pointer transition-colors disabled:opacity-60"
+            disabled={!isDirty || saving}
+            className="flex items-center gap-2 bg-[#14212b] text-[#e0ee56] px-5 py-2.5 text-xs font-black uppercase tracking-[0.12em] hover:bg-[#14212b]/90 cursor-pointer transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {saving ? <Loader2 className="size-3.5 animate-spin" /> : <Save className="size-3.5" />}
-            {saving ? 'Saving...' : 'Save Settings'}
+            {saving ? 'Saving...' : isDirty ? 'Save Changes' : 'Saved (No Changes)'}
           </button>
         </div>
       </form>

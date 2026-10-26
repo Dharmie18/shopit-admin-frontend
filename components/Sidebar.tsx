@@ -26,7 +26,7 @@ export function Sidebar({ currentView, onNavigate, settings }: SidebarProps) {
     { id: 'products' as AdminView, label: 'Product Management', icon: Package, badge: null },
     { id: 'orders' as AdminView, label: 'Order Management', icon: ClipboardList, badge: null },
     { id: 'payments' as AdminView, label: 'Payment Oversight', icon: CreditCard, badge: null },
-    { id: 'subscribers' as AdminView, label: 'Newsletter Subscribers', icon: Mail, badge: 'New' },
+    { id: 'subscribers' as AdminView, label: 'Newsletter Subscribers', icon: Mail, badge: null },
     { id: 'settings' as AdminView, label: 'Store Settings', icon: Settings2, badge: null },
   ];
 
