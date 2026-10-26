@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AdminView, User } from '@/lib/types';
+import { AdminView, User, SiteSettings, AdminInitData } from '@/lib/types';
 import { getAdminToken, clearAdminAuth, getAdminUser, saveAdminAuth } from '@/lib/auth';
 import { apiRequest } from '@/lib/api';
+import { DEFAULT_SITE_SETTINGS } from '@/lib/settings';
 import { Navbar } from '@/components/Navbar';
 import { Sidebar } from '@/components/Sidebar';
 import { Login } from '@/components/Login';
@@ -13,6 +14,7 @@ import { ProductsManager } from '@/components/ProductsManager';
 import { OrdersManager } from '@/components/OrdersManager';
 import { PaymentsManager } from '@/components/PaymentsManager';
 import { SubscribersManager } from '@/components/SubscribersManager';
+import { SettingsManager } from '@/components/SettingsManager';
 
 const INACTIVITY_TIMEOUT_MS = 20 * 60 * 1000; // 20 minutes
 
@@ -23,6 +25,9 @@ export default function AdminPage() {
   const [view, setView] = useState<AdminView>('dashboard');
   const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null);
   const [toast, setToast] = useState('');
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
+  const [adminReports, setAdminReports] = useState<AdminInitData['reports'] | null>(null);
+
 
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
 

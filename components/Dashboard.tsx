@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { apiRequest } from '@/lib/api';
-import { LowStockReport, TopCustomerReport, MonthlySalesReport } from '@/lib/types';
+import { LowStockReport, TopCustomerReport, MonthlySalesReport, SiteSettings } from '@/lib/types';
 import { cn, money, sleep } from '@/lib/utils';
 import {
   TrendingUp,
@@ -19,9 +19,11 @@ import { Skeleton } from './ui/skeleton';
 interface DashboardProps {
   onNavigateToProducts: () => void;
   onNavigateToOrders: () => void;
+  initData?: { low_stock: LowStockReport[]; top_customers: TopCustomerReport[]; monthly_sales: MonthlySalesReport[] };
+  settings?: SiteSettings;
 }
 
-export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: DashboardProps) {
+export function Dashboard({ onNavigateToProducts, onNavigateToOrders, initData, settings }: DashboardProps) {
   const [lowStock, setLowStock] = useState<LowStockReport[]>([]);
   const [topCustomers, setTopCustomers] = useState<TopCustomerReport[]>([]);
   const [monthlySales, setMonthlySales] = useState<MonthlySalesReport[]>([]);
@@ -30,6 +32,16 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
 
   useEffect(() => {
     setOpenedAt(new Date());
+
+    // Use pre-loaded bootstrap data if available
+    if (initData) {
+      setLowStock(Array.isArray(initData.low_stock) ? initData.low_stock : []);
+      setTopCustomers(Array.isArray(initData.top_customers) ? initData.top_customers : []);
+      setMonthlySales(Array.isArray(initData.monthly_sales) ? initData.monthly_sales : []);
+      setLoading(false);
+      return;
+    }
+
     async function loadReports() {
       setLoading(true);
       try {
@@ -48,7 +60,8 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
       }
     }
     loadReports();
-  }, []);
+  }, [initData]);
+
 
   const totalMonthlyRev = monthlySales.reduce((acc, curr) => acc + (Number(curr.total_sales) || 0), 0);
   const maxSale = Math.max(...monthlySales.map((s) => Number(s.total_sales)), 1);
@@ -59,7 +72,7 @@ export function Dashboard({ onNavigateToProducts, onNavigateToOrders }: Dashboar
       <div className="flex flex-col justify-between gap-4 border-b border-[#14212b]/15 pb-6 sm:flex-row sm:items-end">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#9a4e2c]">
-            Internal / ShopIt Ops
+            Internal / {settings?.company_name ?? 'ShopIt'} Ops
           </p>
           <h1 className="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-[-0.08em]">
             Executive Dashboard

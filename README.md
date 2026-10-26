@@ -47,10 +47,10 @@ npm install
 ```
 
 ### 3. Running the Dev Server
-```bash
-npm run dev -- -p 3001
+```powershell
+npm run dev
 ```
-The admin console will start on **[http://localhost:3001](http://localhost:3001)**.
+The admin console will start on **[http://localhost:3001](http://localhost:3001)** (via configured `"next dev --port 3001"` in `package.json`).
 
 ### 4. Production Build & Validation
 ```bash

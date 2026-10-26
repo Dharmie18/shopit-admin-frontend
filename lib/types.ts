@@ -95,4 +95,36 @@ export type AdminView =
   | 'products'
   | 'orders'
   | 'payments'
-  | 'subscribers';
+  | 'subscribers'
+  | 'settings';
+
+export interface SiteSettings {
+  company_name: string;
+  tagline: string;
+  logo_url: string;
+  support_phone: string;
+  whatsapp_number: string;
+  primary_email: string;
+  office_address: string;
+  rc_number: string;
+  currency_symbol: string;
+  currency_code: string;
+  vat_percent: number;
+  socials: {
+    twitter: string;
+    instagram: string;
+    facebook: string;
+    linkedin: string;
+    whatsapp: string;
+  };
+}
+
+export interface AdminInitData {
+  settings: SiteSettings;
+  reports: {
+    low_stock: LowStockReport[];
+    top_customers: TopCustomerReport[];
+    monthly_sales: MonthlySalesReport[];
+  };
+}
+

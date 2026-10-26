@@ -1,5 +1,5 @@
 'use client';
-import { AdminView } from '@/lib/types';
+import { AdminView, SiteSettings } from '@/lib/types';
 import {
   BarChart3,
   Users,
@@ -8,15 +8,17 @@ import {
   ClipboardList,
   CreditCard,
   Mail,
+  Settings2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
   currentView: AdminView;
   onNavigate: (view: AdminView) => void;
+  settings?: SiteSettings;
 }
 
-export function Sidebar({ currentView, onNavigate }: SidebarProps) {
+export function Sidebar({ currentView, onNavigate, settings }: SidebarProps) {
   const menuItems = [
     { id: 'dashboard' as AdminView, label: 'Analytics Dashboard', icon: BarChart3, badge: 'Live' },
     { id: 'users' as AdminView, label: 'User Management', icon: Users, badge: null },
@@ -25,7 +27,10 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
     { id: 'orders' as AdminView, label: 'Order Management', icon: ClipboardList, badge: null },
     { id: 'payments' as AdminView, label: 'Payment Oversight', icon: CreditCard, badge: null },
     { id: 'subscribers' as AdminView, label: 'Newsletter Subscribers', icon: Mail, badge: 'New' },
+    { id: 'settings' as AdminView, label: 'Store Settings', icon: Settings2, badge: null },
   ];
+
+  const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost/ecommerce-api').replace(/^https?:\/\//, '');
 
   return (
     <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-2">
@@ -63,7 +68,7 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
         })}
       </nav>
 
-      {/* Operations Quick Card */}
+      {/* API status card */}
       <div className="hidden lg:block mt-6 border border-[#14212b]/15 bg-[#e8e8e1] p-5">
         <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#9a4e2c]">API Status</p>
         <div className="mt-3 flex items-center gap-2">
@@ -71,7 +76,7 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
           <p className="text-xs font-black">Connected & Verified</p>
         </div>
         <p className="mt-2 text-[11px] leading-relaxed text-[#14212b]/60">
-          Base: <code className="bg-[#14212b]/10 px-1 py-0.5 text-[10px]">localhost/ecommerce-api</code>
+          Base: <code className="bg-[#14212b]/10 px-1 py-0.5 text-[10px]">{apiBase}</code>
         </p>
       </div>
     </aside>

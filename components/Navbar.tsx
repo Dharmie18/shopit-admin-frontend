@@ -1,6 +1,6 @@
 'use client';
-import { AdminView } from '@/lib/types';
-import { CircleUserRound, LogOut, ShieldCheck } from 'lucide-react';
+import { AdminView, SiteSettings } from '@/lib/types';
+import { LogOut, ShieldCheck } from 'lucide-react';
 import { Button } from './ui/button';
 
 interface NavbarProps {
@@ -9,6 +9,7 @@ interface NavbarProps {
   onLogout: () => void;
   adminName?: string;
   adminEmail?: string;
+  settings?: SiteSettings;
 }
 
 export function Navbar({
@@ -17,21 +18,25 @@ export function Navbar({
   onLogout,
   adminName = 'SI Admin',
   adminEmail = 'Administrator',
+  settings,
 }: NavbarProps) {
+  const brandName = settings?.company_name ?? 'ShopIt';
+  const monogram = brandName[0]?.toUpperCase() ?? 'S';
+
   return (
     <header className="sticky top-0 z-30 border-b border-[#14212b]/15 bg-[#f5f5f1]/95 backdrop-blur">
-      {/* Top Banner */}
+      {/* Top banner */}
       <div className="bg-[#14212b] px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#e0ee56]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between">
           <span className="flex items-center gap-2">
             <ShieldCheck className="size-3.5 text-[#e0ee56]" />
-            ShopIt Admin Console · Internal System Ops
+            {brandName} Admin Console · Internal Ops
           </span>
           <span className="hidden sm:inline-block">Auth Level: Superadmin (Role: admin)</span>
         </div>
       </div>
 
-      {/* Main Navbar */}
+      {/* Main navbar */}
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-5 py-3.5">
         <div className="flex items-center gap-6">
           <button
@@ -39,13 +44,13 @@ export function Navbar({
             className="flex items-center gap-2 text-xl font-black tracking-[-0.08em] cursor-pointer"
           >
             <span className="grid size-7 place-items-center bg-[#14212b] text-sm text-[#e0ee56] font-black">
-              S
+              {monogram}
             </span>
-            SHOP IT <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#9a4e2c] ml-1">/ ADMIN</span>
+            {brandName.toUpperCase()} <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#9a4e2c] ml-1">/ ADMIN</span>
           </button>
         </div>
 
-        {/* User Info & Actions */}
+        {/* User info and actions */}
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-3 border-r border-[#14212b]/15 pr-4">
             <div className="grid size-8 place-items-center rounded-full bg-[#e0ee56] text-xs font-black text-[#14212b]">
