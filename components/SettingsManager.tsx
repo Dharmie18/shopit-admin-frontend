@@ -107,10 +107,122 @@ export function SettingsManager({
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-4 animate-pulse">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="h-10 border border-[#14212b]/10 bg-[#e8e8e1]" />
-        ))}
+      <div className="flex flex-col gap-8 animate-pulse">
+        {/* Header Skeleton */}
+        <div className="flex flex-col justify-between gap-4 border-b border-[#14212b]/15 pb-6 sm:flex-row sm:items-end">
+          <div>
+            <div className="h-3.5 w-44 bg-[#e8e8e1]" />
+            <div className="mt-2 h-9 w-64 sm:w-80 bg-[#e8e8e1]" />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="size-4 bg-[#e8e8e1]" />
+            <div className="h-3.5 w-28 bg-[#e8e8e1]" />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-10">
+          {/* Company Information Skeleton */}
+          <div>
+            <div className="h-3.5 w-48 bg-[#9a4e2c]/30 mb-4 pb-2 border-b border-[#14212b]/10" />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <div className="h-3 w-28 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-20 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-48 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-32 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div className="sm:col-span-2">
+                <div className="h-3 w-24 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+                <div className="mt-3 flex items-center gap-3">
+                  <div className="size-10 border border-[#14212b]/15 bg-[#e8e8e1]" />
+                  <div className="h-3 w-24 bg-[#e8e8e1]" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Currency & Tax Skeleton */}
+          <div>
+            <div className="h-3.5 w-36 bg-[#9a4e2c]/30 mb-4 pb-2 border-b border-[#14212b]/10" />
+            <div className="grid gap-5 sm:grid-cols-3">
+              <div>
+                <div className="h-3 w-32 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-28 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-28 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+            </div>
+          </div>
+
+          {/* Contact & Support Skeleton */}
+          <div>
+            <div className="h-3.5 w-44 bg-[#9a4e2c]/30 mb-4 pb-2 border-b border-[#14212b]/10" />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <div className="h-3 w-28 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-28 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-48 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+            </div>
+          </div>
+
+          {/* Social Links Skeleton */}
+          <div>
+            <div className="h-3.5 w-32 bg-[#9a4e2c]/30 mb-4 pb-2 border-b border-[#14212b]/10" />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <div className="h-3 w-24 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-24 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-24 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-24 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+              <div>
+                <div className="h-3 w-36 bg-[#e8e8e1] mb-2" />
+                <div className="h-9.5 w-full border border-[#14212b]/15 bg-[#e8e8e1]/60" />
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Action Bar Skeleton */}
+          <div className="flex items-center justify-between border-t border-[#14212b]/10 pt-6">
+            <div className="h-3.5 w-52 bg-[#e8e8e1]" />
+            <div className="h-9 w-36 bg-[#14212b]/20" />
+          </div>
+        </div>
       </div>
     );
   }
